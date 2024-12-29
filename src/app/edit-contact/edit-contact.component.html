@@ -1,0 +1,66 @@
+<div class="content">
+  <h1 class="header">
+    Edit Contact
+  </h1>
+  <form (ngSubmit)="saveContact(contactForm)" #contactForm="ngForm">
+    <section>
+      <nav>Name/Info</nav>
+      <div>
+        <input type="hidden" [ngModel]="contact.id" name="id">
+        <input placeholder="First Name" [(ngModel)]="contact.firstName" name="firstName" minlength="3" required
+          #firstName="ngModel" [class.error]="firstName.touched && firstName.invalid" />
+        <em *ngIf="firstName.touched && firstName.errors?.['required']"> Please enter a First Name</em>
+        <em *ngIf="firstName.touched && firstName.errors?.['minlength'] "> First Name must be at least 3 characters</em>
+        <input placeholder="Last Name" [(ngModel)]="contact.lastName" name="lastName" />
+
+        <input placeholder="Date of Birth" [(ngModel)]="contact.dateOfBirth" name="dateOfBirth" />
+        <input type="number" placeholder="Favorites Ranking" [(ngModel)]="contact.favoritesRanking"
+          name="favoritesRanking" />
+        <div>
+          <input type="checkbox" [(ngModel)]="contact.personal" name="personal" /> Personal
+        </div>
+
+      </div>
+    </section>
+    <section>
+      <nav>Phone</nav>
+      <div class="flex-column" ngModelGroup="phone" #phoneGroup="ngModelGroup">
+        <div class="flex-group">
+          <input placeholder="Phone" [(ngModel)]="contact.phone.phoneNumber" name="phoneNumber" />
+          <img src="/assets/plus-grey-blue.png" class="add" />
+        </div>
+        <div class="radio">
+          <span *ngFor="let phoneType of phoneTypes">
+            <input type="radio" [value]="phoneType.value" [(ngModel)]="contact.phone.phoneType" name="phoneType" />
+            {{phoneType.title}}
+          </span>
+        </div>
+      </div>
+    </section>
+    <section>
+      <nav>Address</nav>
+      <div>
+        <div class="address" ngModelGroup="address" #addressGroup="ngModelGroup"
+          [class.error]="addressGroup.invalid && addressGroup.dirty">
+          <div class="flex-group">
+            <input placeholder="Address" [(ngModel)]="contact.address.streetAddress" name="streetAddress" required />
+            <img src="/assets/plus-grey-blue.png" class="add" />
+          </div>
+          <input placeholder="City" [(ngModel)]="contact.address.city" name="city" required />
+          <input placeholder="State/Region" [(ngModel)]="contact.address.state" name="state" required />
+          <input placeholder="Zip/Postal Code" [(ngModel)]="contact.address.postalCode" name="postalCode" required />
+          <select [(ngModel)]="contact.address.addressType" name="addressType" required>
+            <option *ngFor="let addressType of addressTypes" [value]="addressType.value">{{addressType.title}}</option>
+          </select>
+        </div>
+        <em *ngIf="addressGroup.invalid && addressGroup.dirty"> incomplete address</em>
+      </div>
+    </section>
+    <div class="buttons">
+      <button class="secondary" type="button">Cancel</button>
+      <button class="primary" type="submit" [disabled]="contactForm.invalid">Save</button>
+      <button disabled class="saving"> Saving ......</button>
+    </div>
+  </form>
+
+</div>
