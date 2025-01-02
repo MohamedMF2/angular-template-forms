@@ -6,6 +6,7 @@
     <section>
       <nav>Name/Info</nav>
       <div>
+        <con-profile-icon-selector [(ngModel)]="contact.icon" name="icon" />
         <input type="hidden" [ngModel]="contact.id" name="id">
         <input placeholder="First Name" [(ngModel)]="contact.firstName" name="firstName" minlength="3" required
           #firstName="ngModel" [class.error]="firstName.touched && firstName.invalid" />
@@ -13,7 +14,7 @@
         <em *ngIf="firstName.touched && firstName.errors?.['minlength'] "> First Name must be at least 3 characters</em>
         <input placeholder="Last Name" [(ngModel)]="contact.lastName" name="lastName" />
 
-        <input placeholder="Date of Birth" [(ngModel)]="contact.dateOfBirth" name="dateOfBirth" />
+        <input placeholder="Date of Birth" type="date" [(ngModel)]="contact.dateOfBirth" name="dateOfBirth" />
         <input type="number" placeholder="Favorites Ranking" [(ngModel)]="contact.favoritesRanking"
           name="favoritesRanking" />
         <div>
@@ -24,16 +25,18 @@
     </section>
     <section>
       <nav>Phone</nav>
-      <div class="flex-column" ngModelGroup="phone" #phoneGroup="ngModelGroup">
-        <div class="flex-group">
-          <input placeholder="Phone" [(ngModel)]="contact.phone.phoneNumber" name="phoneNumber" />
-          <img src="/assets/plus-grey-blue.png" class="add" />
-        </div>
-        <div class="radio">
-          <span *ngFor="let phoneType of phoneTypes">
-            <input type="radio" [value]="phoneType.value" [(ngModel)]="contact.phone.phoneType" name="phoneType" />
-            {{phoneType.title}}
-          </span>
+      <div class="flex-column" ngModelGroup="phones" #phoneGroup="ngModelGroup">
+        <div *ngFor="let phone of contact.phones;let i = index;" class="flex-column"> 
+          <div class="flex-group">
+            <input placeholder="Phone" [(ngModel)]="phone.phoneNumber" name="phoneNumber{{i}}" />
+            <img src="/assets/plus-grey-blue.png" class="add" (click)="addPhoneField()"/>
+          </div>
+          <div class="radio">
+            <span *ngFor="let phoneType of phoneTypes">
+              <input type="radio" [value]="phoneType.value" [(ngModel)]="phone.phoneType" name="phoneType{{i}}" />
+              {{phoneType.title}}
+            </span>
+          </div>
         </div>
       </div>
     </section>
@@ -54,6 +57,14 @@
           </select>
         </div>
         <em *ngIf="addressGroup.invalid && addressGroup.dirty"> incomplete address</em>
+      </div>
+    </section>
+    <section>
+      <nav>Notes</nav>
+      <div>
+        <textarea placeholder="notes" rows="3" name="notes" [(ngModel)]="contact.notes" #notes="ngModel"
+          [restrictedWords]="['foo','bar']" [class.error]="notes.invalid"></textarea>
+        <em *ngIf="notes.errors?.['restrictedWords']">Restricted Words found {{ notes.errors?.['restrictedWords']}}</em>
       </div>
     </section>
     <div class="buttons">

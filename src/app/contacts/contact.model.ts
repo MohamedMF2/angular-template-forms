@@ -1,12 +1,14 @@
 export interface Contact {
   id: string,
+  icon:string,
   firstName: string,
   lastName: string,
   personal:boolean,
   dateOfBirth: Date | null,
   favoritesRanking: number | null,
-  phone: Phone,
+  phones: Phone[],
   address: Address,
+  notes:string
 }
 
 export interface Phone {
